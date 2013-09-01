@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CouchDb.ViewServer", "CouchDb.ViewServer\CouchDb.ViewServer.csproj", "{8F1296C0-D201-43E3-8AE0-5D7C579C2321}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CouchDb.ViewServer.NLog", "CouchDb.ViewServer.NLog\CouchDb.ViewServer.NLog.csproj", "{4DF90466-1D82-4851-96A7-49E5B780B67E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CouchDb.ViewServer.Tests", "CouchDb.ViewServer.Tests\CouchDb.ViewServer.Tests.csproj", "{1AC4847F-33C8-4761-B13B-7CE3AC5A2150}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8F1296C0-D201-43E3-8AE0-5D7C579C2321}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8F1296C0-D201-43E3-8AE0-5D7C579C2321}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8F1296C0-D201-43E3-8AE0-5D7C579C2321}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8F1296C0-D201-43E3-8AE0-5D7C579C2321}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4DF90466-1D82-4851-96A7-49E5B780B67E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4DF90466-1D82-4851-96A7-49E5B780B67E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4DF90466-1D82-4851-96A7-49E5B780B67E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4DF90466-1D82-4851-96A7-49E5B780B67E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1AC4847F-33C8-4761-B13B-7CE3AC5A2150}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1AC4847F-33C8-4761-B13B-7CE3AC5A2150}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1AC4847F-33C8-4761-B13B-7CE3AC5A2150}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1AC4847F-33C8-4761-B13B-7CE3AC5A2150}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
