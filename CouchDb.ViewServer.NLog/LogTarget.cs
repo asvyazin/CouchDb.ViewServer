@@ -6,16 +6,16 @@ namespace CouchDb.ViewServer.NLog
 	[Target("CouchDb.ViewServer.Log")]
 	public class LogTarget: TargetWithLayout
 	{
-		private readonly IViewServer viewServer;
+		private readonly IViewServerProtocol viewServerProtocol;
 
-		public LogTarget(IViewServer viewServer)
+		public LogTarget(IViewServerProtocol viewServerProtocol)
 		{
-			this.viewServer = viewServer;
+			this.viewServerProtocol = viewServerProtocol;
 		}
 
 		protected override async void Write(LogEventInfo logEvent)
 		{
-			await this.viewServer.Log(logEvent.Message);
+			await this.viewServerProtocol.Log(logEvent.Message);
 		}
 	}
 }

@@ -4,15 +4,16 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{8F1296C0-D201-43E3-8AE0-5D7C579C2321}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <ProjectGuid>{AEB25915-C52F-40FC-B8F3-711B74335877}</ProjectGuid>
+    <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>CouchDb.ViewServer</RootNamespace>
-    <AssemblyName>CouchDb.ViewServer</AssemblyName>
+    <RootNamespace>CouchDb.ViewServer.Host</RootNamespace>
+    <AssemblyName>CouchDb.ViewServer.Host</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -22,6 +23,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -31,22 +33,28 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\packages\Newtonsoft.Json.5.0.6\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IViewMap.cs" />
-    <Compile Include="IViewMapper.cs" />
-    <Compile Include="IViewServerProtocol.cs" />
+    <Compile Include="IObjectCreator.cs" />
+    <Compile Include="IViewServerCommandHandlers.cs" />
+    <Compile Include="SimpleObjectCreator.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ViewServerCommand.cs" />
-    <Compile Include="ViewServerProtocol.cs" />
+    <Compile Include="ViewMap.cs" />
+    <Compile Include="ViewMapEntry.cs" />
+    <Compile Include="ViewServerCommandHandlers.cs" />
+    <Compile Include="ViewServerHost.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CouchDb.ViewServer\CouchDb.ViewServer.csproj">
+      <Project>{8F1296C0-D201-43E3-8AE0-5D7C579C2321}</Project>
+      <Name>CouchDb.ViewServer</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
