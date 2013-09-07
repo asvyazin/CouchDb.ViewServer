@@ -4,8 +4,12 @@
 	using System.Collections.Generic;
 	using System.Threading.Tasks;
 
+	using global::NLog;
+
 	public class ViewServerHost
 	{
+		private static readonly Logger Log = LogManager.GetCurrentClassLogger();
+
 		private readonly IViewServerProtocol viewServerProtocol;
 
 		private readonly IViewServerCommandHandlers viewServerCommandHandlers;
@@ -16,11 +20,21 @@
 		{
 			this.viewServerProtocol = viewServerProtocol;
 			this.viewServerCommandHandlers = viewServerCommandHandlers;
-			this.RegisterCommandHandler("reset", args => "true");
+			this.RegisterCommandHandler("reset", this.ResetHandler);
 			this.RegisterCommandHandler("add_fun", this.AddFunHandler);
 			this.RegisterCommandHandler("map_doc", this.MapDocHandler);
 			this.RegisterCommandHandler("reduce", this.ReduceHandler);
 			this.RegisterCommandHandler("rereduce", this.RereduceHandler);
+		}
+
+		private dynamic ResetHandler(dynamic[] args)
+		{
+			if (args.Length != 1)
+				throw new ArgumentException("reset must have only one parameter");
+
+			var options = args[0];
+			Log.Info("reset, options: {0}", options);
+			return viewServerCommandHandlers.Reset(options);
 		}
 
 		private dynamic AddFunHandler(dynamic[] args)
@@ -28,7 +42,9 @@
 			if (args.Length != 1)
 				throw new ArgumentException("add_fun must have only one parameter");
 
-			return viewServerCommandHandlers.AddFun(args[0]);
+			var fun = args[0].Value;
+			Log.Info("loading map fun: \"{0}\"", fun);
+			return viewServerCommandHandlers.AddFun(fun);
 		}
 
 		private dynamic MapDocHandler(dynamic[] args)
@@ -36,7 +52,9 @@
 			if (args.Length != 1)
 				throw new ArgumentException("map_doc must have only one parameter");
 
-			return viewServerCommandHandlers.MapDoc(args[0]);
+			var document = args[0];
+			Log.Info("mapping document: {0}", document);
+			return viewServerCommandHandlers.MapDoc(document);
 		}
 
 		private dynamic ReduceHandler(dynamic[] args)
@@ -44,7 +62,7 @@
 			if (args.Length != 2)
 				throw new ArgumentException("reduce must have two parameters");
 
-			return viewServerCommandHandlers.Reduce(args[0], args[1]);
+			return viewServerCommandHandlers.Reduce(args[0].Value, args[1]);
 		}
 
 		private dynamic RereduceHandler(dynamic[] args)
@@ -52,7 +70,7 @@
 			if (args.Length != 2)
 				throw new ArgumentException("rereduce must have two parameters");
 
-			return viewServerCommandHandlers.Rereduce(args[0], args[1]);
+			return viewServerCommandHandlers.Rereduce(args[0].Value, args[1]);
 		}
 
 		private void RegisterCommandHandler(string commandName, Func<dynamic[], dynamic> commandHandler)
@@ -62,9 +80,20 @@
 
 		public async Task Run()
 		{
+			Log.Debug("starting couchdb viewserver...");
 			while (true)
 			{
-				var viewServerCommand = await viewServerProtocol.Read();
+				ViewServerCommand viewServerCommand;
+				try
+				{
+					viewServerCommand = await this.viewServerProtocol.Read();
+				}
+				catch (Exception e)
+				{
+					Log.Error("Unexpected exception reading command: {0}", e);
+					viewServerProtocol.ErrorSync("unexpected_error", e.ToString());
+					continue;
+				}
 
 				Func<dynamic[], dynamic> commandHandler;
 				if (!commandHandlers.TryGetValue(viewServerCommand.Name, out commandHandler))
@@ -80,7 +109,8 @@
 				}
 				catch (Exception e)
 				{
-					viewServerProtocol.ErrorSync("unexpected_error", e.Message);
+					Log.Error("Unexpected exception handling command: {0}", e);
+					viewServerProtocol.ErrorSync("unexpected_error", e.ToString());
 					continue;
 				}
 				await viewServerProtocol.Write(result);

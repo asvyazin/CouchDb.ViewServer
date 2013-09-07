@@ -15,7 +15,7 @@ namespace CouchDb.ViewServer.NLog
 
 		protected override async void Write(LogEventInfo logEvent)
 		{
-			await this.viewServerProtocol.Log(logEvent.Message);
+			await this.viewServerProtocol.Log(logEvent.FormattedMessage);
 		}
 	}
 }

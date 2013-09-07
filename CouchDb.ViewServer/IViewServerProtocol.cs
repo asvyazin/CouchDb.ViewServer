@@ -10,6 +10,8 @@
 
 		Task Log(string message);
 
+		void LogSync(string message);
+
 		Task Error(string code, string message);
 
 		void ErrorSync(string code, string message);

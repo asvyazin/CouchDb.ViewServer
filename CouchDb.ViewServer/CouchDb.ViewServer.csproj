@@ -34,10 +34,15 @@
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\packages\Newtonsoft.Json.5.0.6\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="NLog">
+      <HintPath>..\packages\NLog.2.0.1.2\lib\net45\NLog.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ConsoleWrapper.cs" />
+    <Compile Include="IConsoleWrapper.cs" />
     <Compile Include="IViewMap.cs" />
     <Compile Include="IViewMapper.cs" />
     <Compile Include="IViewServerProtocol.cs" />

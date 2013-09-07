@@ -15,11 +15,12 @@
 			this.objectCreator = objectCreator;
 		}
 
-		public void AddFun(string fun)
+		public dynamic AddFun(string fun)
 		{
 			var mapperType = Type.GetType(fun);
 			var mapper = (IViewMapper)objectCreator.CreateObjectByType(mapperType);
 			mappers.Add(mapper);
+			return true;
 		}
 
 		public dynamic MapDoc(dynamic document)
@@ -42,6 +43,11 @@
 		public dynamic Rereduce(string[] rereduceFuns, dynamic[] reduceResults)
 		{
 			throw new NotImplementedException();
+		}
+
+		public dynamic Reset(dynamic options)
+		{
+			return true;
 		}
 	}
 }
