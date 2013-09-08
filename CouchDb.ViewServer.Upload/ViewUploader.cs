@@ -2,8 +2,10 @@
 {
 	using System;
 	using System.Collections.Generic;
+	using System.Linq;
 	using System.Net;
 	using System.Net.Http;
+	using System.Reflection;
 	using System.Threading.Tasks;
 
 	using MyCouch;
@@ -72,6 +74,26 @@
 		{
 			var updatedDdocJson = couchdbClient.Serializer.Serialize(updatedDdoc);
 			await couchdbClient.Documents.PutAsync(ddocId, ddocRev, updatedDdocJson);
+		}
+
+		public static async Task UploadView(IClient couchdbClient, Type viewType)
+		{
+			var attribute = viewType.GetCustomAttribute<CouchDbViewAttribute>(false);
+			await UploadView(couchdbClient, attribute.DesignDocumentName, attribute.ViewName, viewType);
+		}
+
+		public static async Task UploadAllViewsFromAssembly(IClient couchdbClient, Assembly assembly)
+		{
+			var viewTypes = assembly.GetTypes().Where(IsCouchDbView);
+			foreach (var viewType in viewTypes)
+			{
+				await UploadView(couchdbClient, viewType);
+			}
+		}
+
+		private static bool IsCouchDbView(Type type)
+		{
+			return type.CustomAttributes.Any(a => a.AttributeType == typeof(CouchDbViewAttribute));
 		}
 	}
 }

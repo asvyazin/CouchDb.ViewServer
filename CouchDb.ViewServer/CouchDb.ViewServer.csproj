@@ -48,6 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ConsoleWrapper.cs" />
+    <Compile Include="CouchDbViewAttribute.cs" />
     <Compile Include="IConsoleWrapper.cs" />
     <Compile Include="IViewMap.cs" />
     <Compile Include="IViewMapper.cs" />
