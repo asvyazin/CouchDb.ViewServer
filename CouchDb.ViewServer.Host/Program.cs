@@ -1,9 +1,5 @@
 ﻿namespace CouchDb.ViewServer.Host
 {
-	using System;
-	using System.IO;
-	using System.Reflection;
-
 	using CouchDb.ViewServer.NLog;
 
 	using global::NLog;
@@ -28,12 +24,8 @@
 			var config = new LoggingConfiguration();
 			var couchDbTarget = new LogTarget(viewServerProtocol);
 			config.AddTarget("couchdb", couchDbTarget);
-			var currentDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().CodeBase);
-			if (string.IsNullOrEmpty(currentDirectory))
-				throw new InvalidOperationException("Could not get current directory");
 
-			var logFileName = Path.Combine(currentDirectory, "viewserver.log");
-			var fileTarget = new FileTarget { FileName = logFileName };
+			var fileTarget = new FileTarget { FileName = "${basedir}/viewserver.log" };
 			config.AddTarget("file", fileTarget);
 			config.LoggingRules.Add(new LoggingRule("*", LogLevel.Debug, fileTarget));
 			config.LoggingRules.Add(new LoggingRule("*", LogLevel.Info, couchDbTarget));

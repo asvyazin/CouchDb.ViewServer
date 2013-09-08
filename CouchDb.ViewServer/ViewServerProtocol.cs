@@ -28,14 +28,14 @@ namespace CouchDb.ViewServer
 		{
 			var outputString = await JsonConvert.SerializeObjectAsync(outputValue);
 			if (!preventSelfCall)
-				Logger.Debug("write line: {0}", outputString);
+				Logger.Debug("Output: \"{0}\"", outputString);
 			console.WriteLine(outputString);
 		}
 
 		public async Task<ViewServerCommand> Read()
 		{
 			var inputString = console.ReadLine();
-			Logger.Debug("read line: \"{0}\"", inputString);
+			Logger.Debug("Input: \"{0}\"", inputString);
 			var commandJson = await JsonConvert.DeserializeObjectAsync<dynamic>(inputString);
 			var result = ((JArray)commandJson).Cast<dynamic>().ToArray();
 			var commandName = (string)result[0];
