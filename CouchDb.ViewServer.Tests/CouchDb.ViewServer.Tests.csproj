@@ -46,12 +46,17 @@
   <ItemGroup>
     <Compile Include="JsonTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ViewServerCommandHandlersTests.cs" />
     <Compile Include="ViewServerProtocolTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CouchDb.ViewServer.Host\CouchDb.ViewServer.Host.csproj">
+      <Project>{AEB25915-C52F-40FC-B8F3-711B74335877}</Project>
+      <Name>CouchDb.ViewServer.Host</Name>
+    </ProjectReference>
     <ProjectReference Include="..\CouchDb.ViewServer\CouchDb.ViewServer.csproj">
       <Project>{8F1296C0-D201-43E3-8AE0-5D7C579C2321}</Project>
       <Name>CouchDb.ViewServer</Name>
