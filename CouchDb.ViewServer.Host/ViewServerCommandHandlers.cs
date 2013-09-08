@@ -17,8 +17,7 @@
 
 		public dynamic AddFun(string fun)
 		{
-			var mapperType = Type.GetType(fun);
-			var mapper = (IViewMapper)objectCreator.CreateObjectByType(mapperType);
+			var mapper = (IViewMapper)objectCreator.CreateObjectByTypeName(fun);
 			mappers.Add(mapper);
 			return true;
 		}

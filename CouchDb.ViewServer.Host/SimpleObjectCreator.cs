@@ -4,7 +4,12 @@
 
 	public class SimpleObjectCreator : IObjectCreator
 	{
-		public object CreateObjectByType(Type type)
+		public object CreateObjectByTypeName(string typeName)
+		{
+			return CreateObjectByType(Type.GetType(typeName));
+		}
+
+		private static object CreateObjectByType(Type type)
 		{
 			var parameterlessConstructor = type.GetConstructor(Type.EmptyTypes);
 			if (parameterlessConstructor == null)
