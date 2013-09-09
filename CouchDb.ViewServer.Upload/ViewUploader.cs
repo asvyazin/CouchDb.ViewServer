@@ -12,21 +12,21 @@
 
 	using Newtonsoft.Json.Linq;
 
-	public class ViewUploader
+	public static class ViewUploader
 	{
 		private const string ViewLanguage = ".net";
 
 		public static async Task UploadView(IClient couchdbClient, string ddocName, string viewName, Type viewType)
 		{
-			if (!viewType.IsSubclassOf(typeof(IViewMapper)))
-				throw new InvalidOperationException("View must implement IViewMapper interface");
+			if (!typeof(IViewMapper).IsAssignableFrom(viewType))
+				throw new InvalidOperationException(string.Format("View type {0} does not implement IViewMapper interface", viewType));
 
 			var ddocId = string.Format("_design/{0}", ddocName);
 			var ddocResponse = await couchdbClient.Documents.GetAsync(ddocId);
 			if (!ddocResponse.IsSuccess)
 			{
 				if (ddocResponse.StatusCode != HttpStatusCode.NotFound)
-					throw new HttpRequestException(string.Format("HTTP error getting design document {0}: {1}", ddocName, ddocResponse));
+					throw new HttpRequestException(string.Format("HTTP error getting design document {0}: {1}", ddocName, ddocResponse.GenerateToStringDebugVersion()));
 
 				await PutNewDdoc(couchdbClient, ddocId, viewName, viewType);
 				return;
@@ -39,7 +39,12 @@
 
 			dynamic viewObj;
 			if (existingDdoc.Views.TryGetValue(viewName, out viewObj))
-				UpdateMap(viewObj, viewType);
+			{
+				var newMap = viewType.AssemblyQualifiedName;
+				if (viewObj.map == newMap)
+					return;
+				viewObj.map = newMap;
+			}
 			else
 			{
 				viewObj = CreateNewView(viewType);
@@ -60,14 +65,9 @@
 			await couchdbClient.Documents.PutAsync(ddocId, newDdocJson);
 		}
 
-		private static void UpdateMap(dynamic viewObj, Type viewType)
-		{
-			viewObj.map = viewType.FullName;
-		}
-
 		private static dynamic CreateNewView(Type viewType)
 		{
-			return new JObject { { "map", viewType.FullName } };
+			return new JObject { { "map", viewType.AssemblyQualifiedName } };
 		}
 
 		private static async Task PutUpdatedDdoc(IClient couchdbClient, string ddocId, string ddocRev, DdocModel updatedDdoc)
@@ -85,10 +85,7 @@
 		public static async Task UploadAllViewsFromAssembly(IClient couchdbClient, Assembly assembly)
 		{
 			var viewTypes = assembly.GetTypes().Where(IsCouchDbView);
-			foreach (var viewType in viewTypes)
-			{
-				await UploadView(couchdbClient, viewType);
-			}
+			await Task.WhenAll(viewTypes.Select(viewType => UploadView(couchdbClient, viewType)));
 		}
 
 		private static bool IsCouchDbView(Type type)
