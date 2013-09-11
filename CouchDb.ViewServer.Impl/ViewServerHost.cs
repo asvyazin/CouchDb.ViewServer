@@ -1,10 +1,10 @@
-﻿namespace CouchDb.ViewServer.Host
+namespace CouchDb.ViewServer.Impl
 {
 	using System;
 	using System.Collections.Generic;
 	using System.Threading.Tasks;
 
-	using global::NLog;
+	using NLog;
 
 	public class ViewServerHost
 	{
@@ -34,7 +34,7 @@
 
 			var options = args[0];
 			Log.Info("reset, options: {0}", options);
-			return viewServerCommandHandlers.Reset(options);
+			return this.viewServerCommandHandlers.Reset(options);
 		}
 
 		private dynamic AddFunHandler(dynamic[] args)
@@ -44,7 +44,7 @@
 
 			var fun = args[0].Value;
 			Log.Info("loading map fun: \"{0}\"", fun);
-			return viewServerCommandHandlers.AddFun(fun);
+			return this.viewServerCommandHandlers.AddFun(fun);
 		}
 
 		private dynamic MapDocHandler(dynamic[] args)
@@ -54,7 +54,7 @@
 
 			var document = args[0];
 			Log.Info("mapping document: {0}", document);
-			return viewServerCommandHandlers.MapDoc(document);
+			return this.viewServerCommandHandlers.MapDoc(document);
 		}
 
 		private dynamic ReduceHandler(dynamic[] args)
@@ -62,7 +62,7 @@
 			if (args.Length != 2)
 				throw new ArgumentException("reduce must have two parameters");
 
-			return viewServerCommandHandlers.Reduce(args[0].Value, args[1]);
+			return this.viewServerCommandHandlers.Reduce(args[0].Value, args[1]);
 		}
 
 		private dynamic RereduceHandler(dynamic[] args)
@@ -70,12 +70,12 @@
 			if (args.Length != 2)
 				throw new ArgumentException("rereduce must have two parameters");
 
-			return viewServerCommandHandlers.Rereduce(args[0].Value, args[1]);
+			return this.viewServerCommandHandlers.Rereduce(args[0].Value, args[1]);
 		}
 
 		private void RegisterCommandHandler(string commandName, Func<dynamic[], dynamic> commandHandler)
 		{
-			commandHandlers.Add(commandName, commandHandler);
+			this.commandHandlers.Add(commandName, commandHandler);
 		}
 
 		public async Task Run()
@@ -91,14 +91,14 @@
 				catch (Exception e)
 				{
 					Log.Error("Unexpected exception reading command: {0}", e);
-					viewServerProtocol.ErrorSync("unexpected_error", e.ToString());
+					this.viewServerProtocol.ErrorSync("unexpected_error", e.ToString());
 					continue;
 				}
 
 				Func<dynamic[], dynamic> commandHandler;
-				if (!commandHandlers.TryGetValue(viewServerCommand.Name, out commandHandler))
+				if (!this.commandHandlers.TryGetValue(viewServerCommand.Name, out commandHandler))
 				{
-					await viewServerProtocol.Error("unknown_command", string.Format("Unknown viewserver command: {0}", viewServerCommand.Name));
+					await this.viewServerProtocol.Error("unknown_command", string.Format("Unknown viewserver command: {0}", viewServerCommand.Name));
 					continue;
 				}
 
@@ -110,10 +110,10 @@
 				catch (Exception e)
 				{
 					Log.Error("Unexpected exception handling command: {0}", e);
-					viewServerProtocol.ErrorSync("unexpected_error", e.ToString());
+					this.viewServerProtocol.ErrorSync("unexpected_error", e.ToString());
 					continue;
 				}
-				await viewServerProtocol.Write(result);
+				await this.viewServerProtocol.Write(result);
 			}
 // ReSharper disable FunctionNeverReturns
 		}

@@ -71,6 +71,10 @@
       <Project>{AEB25915-C52F-40FC-B8F3-711B74335877}</Project>
       <Name>CouchDb.ViewServer.Host</Name>
     </ProjectReference>
+    <ProjectReference Include="..\CouchDb.ViewServer.Impl\CouchDb.ViewServer.Impl.csproj">
+      <Project>{BFE8C8D2-F97A-4A06-B65B-1C68BC61C166}</Project>
+      <Name>CouchDb.ViewServer.Impl</Name>
+    </ProjectReference>
     <ProjectReference Include="..\CouchDb.ViewServer.Upload\CouchDb.ViewServer.Upload.csproj">
       <Project>{3B7FBD6A-FA8F-4679-AEC0-F596B63F0548}</Project>
       <Name>CouchDb.ViewServer.Upload</Name>

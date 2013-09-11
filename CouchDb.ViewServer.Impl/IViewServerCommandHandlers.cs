@@ -1,4 +1,4 @@
-﻿namespace CouchDb.ViewServer.Host
+namespace CouchDb.ViewServer.Impl
 {
 	public interface IViewServerCommandHandlers
 	{

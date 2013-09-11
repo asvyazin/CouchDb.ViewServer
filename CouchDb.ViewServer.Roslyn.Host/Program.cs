@@ -1,7 +1,8 @@
-﻿namespace CouchDb.ViewServer.Host
+﻿namespace CouchDb.ViewServer.Roslyn.Host
 {
 	using CouchDb.ViewServer.Impl;
-	using CouchDb.ViewServer.NLog;
+
+	using NLog;
 
 	using global::NLog;
 	using global::NLog.Config;
@@ -14,8 +15,7 @@
 			var consoleWrapper = new ConsoleWrapper();
 			var viewServerProtocol = new ViewServerProtocol(consoleWrapper);
 			InitNLog(viewServerProtocol);
-			var objectCreator = new SimpleObjectCreator();
-			var viewServerCommandHandlers = new ViewServerCommandHandlers(objectCreator);
+			var viewServerCommandHandlers = new ViewServerCommandHandlers();
 			var host = new ViewServerHost(viewServerProtocol, viewServerCommandHandlers);
 			host.Run().Wait();
 		}

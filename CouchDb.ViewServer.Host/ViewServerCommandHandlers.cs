@@ -4,6 +4,8 @@
 	using System.Collections.Generic;
 	using System.Linq;
 
+	using CouchDb.ViewServer.Impl;
+
 	public class ViewServerCommandHandlers : IViewServerCommandHandlers
 	{
 		private readonly IObjectCreator objectCreator;
