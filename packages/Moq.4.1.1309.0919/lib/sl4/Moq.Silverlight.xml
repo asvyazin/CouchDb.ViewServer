@@ -262,6 +262,13 @@
             expressions on the delegate into expressions on the interface proxy.
             </summary>
         </member>
+        <member name="P:Moq.Mock.IsDelegateMock">
+            <summary>
+            Allows to check whether expression conversion to the <see cref="P:Moq.Mock.DelegateInterfaceMethod"/> 
+            must be performed on the mock, without causing unnecessarily early initialization of 
+            the mock instance, which breaks As{T}.
+            </summary>
+        </member>
         <member name="P:Moq.Mock.DefaultValueProvider">
             <summary>
             Specifies the class that will determine the default 
