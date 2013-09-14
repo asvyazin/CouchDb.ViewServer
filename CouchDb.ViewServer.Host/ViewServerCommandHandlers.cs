@@ -29,9 +29,8 @@
 			var result = new List<dynamic>();
 			foreach (var mapper in mappers)
 			{
-				var viewMap = new ViewMap();
-				mapper.MapDocument(viewMap, document);
-				result.Add(viewMap.Entries.Select(e => new[]{e.Key, e.Value}).ToList());
+				IEnumerable<dynamic> emittedDocuments = mapper.MapDocument(document);
+				result.Add(emittedDocuments.Select(e => new[]{e.Key, e.Value}).ToList());
 			}
 			return result;
 		}

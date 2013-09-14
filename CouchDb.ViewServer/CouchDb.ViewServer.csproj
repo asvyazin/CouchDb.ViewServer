@@ -49,8 +49,8 @@
   <ItemGroup>
     <Compile Include="ConsoleWrapper.cs" />
     <Compile Include="CouchDbViewAttribute.cs" />
+    <Compile Include="Emit.cs" />
     <Compile Include="IConsoleWrapper.cs" />
-    <Compile Include="IViewMap.cs" />
     <Compile Include="IViewMapper.cs" />
     <Compile Include="IViewServerProtocol.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -1,7 +1,9 @@
 ﻿namespace CouchDb.ViewServer
 {
+	using System.Collections.Generic;
+
 	public interface IViewMapper
 	{
-		void MapDocument(IViewMap map, dynamic document);
+		IEnumerable<Emit> MapDocument(dynamic document);
 	}
 }

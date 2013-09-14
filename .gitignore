@@ -4,3 +4,4 @@ obj
 *.suo
 *.ncrunchproject
 *.ncrunchsolution
+*.crunchsolution.cache

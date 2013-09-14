@@ -40,20 +40,20 @@
 			var value11 = Guid.NewGuid();
 			var key12 = Guid.NewGuid();
 			var value12 = Guid.NewGuid();
-			mapper1.Setup(m => m.MapDocument(It.IsAny<IViewMap>(), doc)).Callback((IViewMap map, dynamic d) =>
+			mapper1.Setup(m => m.MapDocument(doc)).Returns((dynamic d) => new[]
 			{
-				map.Emit(key11, value11);
-				map.Emit(key12, value12);
+				new Emit(key11, value11),
+				new Emit(key12, value12)
 			}).Verifiable();
 
 			var key21 = Guid.NewGuid();
 			var value21 = Guid.NewGuid();
 			var key22 = Guid.NewGuid();
 			var value22 = Guid.NewGuid();
-			mapper2.Setup(m => m.MapDocument(It.IsAny<IViewMap>(), doc)).Callback((IViewMap map, dynamic d) =>
+			mapper2.Setup(m => m.MapDocument(doc)).Returns((dynamic d) => new[]
 			{
-				map.Emit(key21, value21);
-				map.Emit(key22, value22);
+				new Emit(key21, value21),
+				new Emit(key22, value22)
 			}).Verifiable();
 
 			var result = this.viewServerCommandHandlers.MapDoc(doc);
