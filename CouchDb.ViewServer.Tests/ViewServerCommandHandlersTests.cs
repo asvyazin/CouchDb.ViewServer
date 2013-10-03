@@ -1,6 +1,7 @@
 ﻿namespace CouchDb.ViewServer.Tests
 {
 	using System;
+	using System.Collections.Generic;
 
 	using CouchDb.ViewServer.Host;
 
@@ -73,6 +74,53 @@
 			objectCreator.Verify();
 			mapper1.Verify();
 			mapper2.Verify();
+		}
+
+		[Fact]
+		public void ReduceTest()
+		{
+			const string Reducer = "reducer";
+			var reducer = new Mock<IViewReducer>();
+			objectCreator.Setup(c => c.CreateObjectByTypeName(Reducer)).Returns(reducer.Object).Verifiable();
+
+			var key1 = Guid.NewGuid();
+			var docId1 = Guid.NewGuid();
+			var value1 = Guid.NewGuid();
+			var key2 = Guid.NewGuid();
+			var docId2 = Guid.NewGuid();
+			var value2 = Guid.NewGuid();
+			var expectedResult = Guid.NewGuid();
+
+			reducer.Setup(r => r.Reduce(It.IsAny<IEnumerable<MapResult>>())).Returns((IEnumerable<MapResult> r) =>
+			{
+				Assert.Equal(new []
+				{
+					new MapResult
+					{
+						Key = key1,
+						DocumentId = docId1,
+						Value = value1,
+					},
+					new MapResult
+					{
+						Key = key2,
+						DocumentId = docId2,
+						Value = value2,
+					}
+				}, r);
+				return expectedResult;
+			}).Verifiable();
+
+			var result = viewServerCommandHandlers.Reduce(new[] { Reducer }, new dynamic[]
+			{
+				new dynamic[] { new dynamic[] { key1, docId1 }, value1 },
+				new dynamic[] { new dynamic[] { key2, docId2 }, value2 }
+			});
+
+			Assert.Equal(expectedResult, result[0]);
+
+			objectCreator.Verify();
+			reducer.Verify();
 		}
 
 		private static void AssertEqualJson(dynamic expected, dynamic actual)

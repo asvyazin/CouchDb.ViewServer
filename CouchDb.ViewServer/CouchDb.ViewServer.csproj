@@ -52,7 +52,9 @@
     <Compile Include="Emit.cs" />
     <Compile Include="IConsoleWrapper.cs" />
     <Compile Include="IViewMapper.cs" />
+    <Compile Include="IViewReducer.cs" />
     <Compile Include="IViewServerProtocol.cs" />
+    <Compile Include="MapResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewServerCommand.cs" />
     <Compile Include="ViewServerProtocol.cs" />
